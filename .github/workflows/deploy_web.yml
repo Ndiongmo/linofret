@@ -1,0 +1,57 @@
+name: 🚀 Deploy Flutter Web to OVH via SCP
+
+on:
+  push:
+    branches:
+      - main        # 🔁 Change to 'demo' or another branch if needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # 1️⃣ Checkout your Flutter project
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.35.6"   # ✅ Replace with your local Flutter version
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 4️⃣ Setup the demo environment
+      - name: Setup demo environment
+        run: cp lib/config/env.demo.dart lib/config/env.dart
+
+      # 5️⃣ Build Flutter Web (release)
+      - name: Build Flutter Web
+        run: flutter build web --release
+
+      # 6️⃣ Upload to OVH via SCP
+      - name: Deploy to OVH via SCP
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.OVH_SSH_KEY }}
+        run: |
+          echo "🚀 Starting deployment to OVH..."
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # 🧩 Variables — customize for your setup
+          REMOTE_USER="linofrc-app@ssh.cluster130.hosting.ovh.net"                     # ex: ftpXXXXXX or user@domain.com
+          REMOTE_HOST="ssh.cluster130.hosting.ovh.net"                # ex: ftp.clusterXXX.hosting.ovh.net
+          REMOTE_DIR="www/linofret_demo "                            # Remote target folder on OVH
+
+          # Clean old files (optional but recommended)
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "rm -rf ${REMOTE_DIR}/*"
+
+          # Upload new files
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r build/web/* $REMOTE_USER@$REMOTE_HOST:${REMOTE_DIR}/
+
+          echo "✅ Deployment completed successfully!"

@@ -57,7 +57,9 @@ class _ColisLiePageState extends State<ColisLiePage> {
       return;
     }
 
-    final url = Uri.parse(encodagesIndexUrl);
+    final url = Uri.parse(
+      AppConfig.api("/encodages/index.json"),
+    ); //encodagesIndexUrl
 
     try {
       final response = await http.post(
@@ -101,55 +103,61 @@ class _ColisLiePageState extends State<ColisLiePage> {
       title: "Colis Liés",
       currentIndex: _currentIndex,
       onTabSelected: _navigateTo,
-      child: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : colisList.isEmpty
-          ? Center(
-              child: Text(
-                message.isNotEmpty
-                    ? message
-                    : "Aucun colis lié à cette prise en charge.",
-                style: const TextStyle(color: Colors.black54),
-              ),
-            )
-          : ListView.builder(
-              itemCount: colisList.length,
-              itemBuilder: (context, index) {
-                final colis = colisList[index];
-                return Card(
-                  elevation: 3,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.blue.shade100,
-                      child: const Icon(
-                        Icons.local_shipping,
-                        color: Colors.blue,
-                      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(12),
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : colisList.isEmpty
+            ? Center(
+                child: Text(
+                  message.isNotEmpty
+                      ? message
+                      : "Aucun colis lié à cette prise en charge.",
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: colisList.length,
+                itemBuilder: (context, index) {
+                  final colis = colisList[index];
+                  return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    title: Text(
-                      "${colis["designation"] ?? "Colis"} - ${colis["poids"] ?? "?"} kg",
-                    ),
-                    subtitle: Text(colis["descriptif"] ?? ""),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // 👇 Navigation locale vers la page de détail colis
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ColisDetailsPage(
-                            encodageId: colis["id"].toString(),
-                          ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.blue.shade100,
+                        child: const Icon(
+                          Icons.local_shipping,
+                          color: Colors.blue,
                         ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+                      ),
+                      title: Text(
+                        "${colis["designation"] ?? "Colis"} - ${colis["poids"] ?? "?"} kg",
+                      ),
+                      subtitle: Text(colis["descriptif"] ?? ""),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        // 👇 Navigation locale vers la page de détail colis
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ColisDetailsPage(
+                              encodageId: colis["id"].toString(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

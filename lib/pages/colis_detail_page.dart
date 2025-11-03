@@ -59,7 +59,9 @@ class _ColisDetailsPageState extends State<ColisDetailsPage> {
       return;
     }
 
-    final url = Uri.parse("$encodagesViewUrl${widget.encodageId}.json");
+    final url = Uri.parse(
+      AppConfig.api("/encodages/view/${widget.encodageId}.json"),
+    );
 
     try {
       final response = await http.get(
@@ -76,7 +78,8 @@ class _ColisDetailsPageState extends State<ColisDetailsPage> {
           final images = encodage["image2encodages"];
           if (images != null && images is List && images.isNotEmpty) {
             final srcPath = images[0]["path"];
-            imagePath = "$imgHost/thinkfreight/images/store/$srcPath";
+            //imagePath = "$imgHost/thinkfreight/images/store/$srcPath";
+            imagePath = AppConfig.media(srcPath);
           }
           isLoading = false;
         });
@@ -133,12 +136,18 @@ class _ColisDetailsPageState extends State<ColisDetailsPage> {
                             child: Image.network(
                               imagePath!,
                               height: 200,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Icon(
-                                Icons.broken_image,
-                                size: 100,
-                                color: Colors.grey,
-                              ),
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                print(
+                                  'Failed to load image from URL: $imagePath',
+                                );
+                                print('Flutter Error: $error');
+                                return const Icon(
+                                  Icons.broken_image,
+                                  size: 100,
+                                  color: Colors.grey,
+                                );
+                              },
                             ),
                           ),
                         ),

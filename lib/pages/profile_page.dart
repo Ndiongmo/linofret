@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
         return;
       }
       final resp = await http.get(
-        Uri.parse(viewProfileUrl), // VIEW_PROFILE_URL
+        Uri.parse(AppConfig.api("/clients/view.json")), // viewProfileUrl
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $_token',

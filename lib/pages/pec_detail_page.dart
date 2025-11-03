@@ -59,7 +59,9 @@ class _PriseEnChargeDetailsPageState extends State<PriseEnChargeDetailsPage> {
       return;
     }
 
-    final url = Uri.parse("$bon2commandesViewUrl${widget.bon2commandeId}.json");
+    final url = Uri.parse(
+      AppConfig.api("/bon2commandes/view/${widget.bon2commandeId}.json"),
+    ); //bon2commandesViewUrl
 
     try {
       final response = await http.get(

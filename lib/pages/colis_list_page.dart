@@ -59,7 +59,7 @@ class _ColisPageState extends State<ColisPage> {
       }
 
       final resp = await http.post(
-        Uri.parse(encodagesIndexUrl), //ENCODAGES_INDEX_URL
+        Uri.parse(AppConfig.api("/encodages/index.json")), //encodagesIndexUrl
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $_token',

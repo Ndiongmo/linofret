@@ -18,7 +18,7 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
   String? _token;
 
   // Contrôleurs
-  final TextEditingController poidsController = TextEditingController();
+  //final TextEditingController poidsController = TextEditingController();
   final TextEditingController descriptifController = TextEditingController();
   final TextEditingController doorEnlevementController =
       TextEditingController();
@@ -72,7 +72,9 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
         return;
       }
 
-      final url = Uri.parse(destinatairesUrl);
+      final url = Uri.parse(
+        AppConfig.api("/clients/destinataire.json"),
+      ); //destinatairesUrl
       final response = await http.get(
         url,
         headers: {"Authorization": "Bearer $_token"},
@@ -119,7 +121,9 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString("jwt_token");
 
-    final url = Uri.parse(bon2commandesAddUrl);
+    final url = Uri.parse(
+      AppConfig.api("/bon2commandes/add.json"),
+    ); //bon2commandesAddUrl
 
     try {
       final response = await http.post(
@@ -130,7 +134,7 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
         },
         body: json.encode({
           "destinataireId": selectedDestinataireId,
-          "poids": poidsController.text.trim(),
+          //"poids": poidsController.text.trim(),
           "descriptif": descriptifController.text.trim(),
           "enlevementId": enlevementId,
           "doorEnlevement": doorEnlevementController.text.trim(),
@@ -174,8 +178,8 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
   }
 
   void _clearForm() {
-    poidsController.clear();
-    //descriptifController.clear();
+    //poidsController.clear();
+    descriptifController.clear();
     doorEnlevementController.clear();
     doorLivraisonController.clear();
     selectedDestinataireId = null;
@@ -218,7 +222,7 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
               const SizedBox(height: 20),
 
               // 🔹 Poids
-              TextFormField(
+              /*TextFormField(
                 controller: poidsController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -236,7 +240,7 @@ class _AddPriseEnChargePageState extends State<AddPrisePage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20),*/
 
               // 🔹 Descriptif
               TextFormField(

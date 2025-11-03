@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final url = Uri.parse(loginUrl);
+      final url = Uri.parse(AppConfig.api("/clients/token.json")); //loginUrl
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},

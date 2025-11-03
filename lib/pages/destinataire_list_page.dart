@@ -58,7 +58,9 @@ class _DestinatairesPageState extends State<DestinatairesPage> {
     });
     try {
       final resp = await http.get(
-        Uri.parse(destinatairesUrl),
+        Uri.parse(
+          AppConfig.api("/clients/destinataire.json"),
+        ), //destinatairesUrl
         headers: {
           'Authorization': 'Bearer $_token',
           'Content-Type': 'application/json',

@@ -4,11 +4,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 
-/*const String baseHost =
-    "http://localhost"; // <-- change to http://10.0.2.2 for Android emulator*/
-const String loginUrl = "$baseHost/thinkfreight/api/v1/clients/token.json";
-const String registerUrl = "$baseHost/thinkfreight/api/v1/clients/add.json";
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
   @override
@@ -48,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       final resp = await http.post(
-        Uri.parse(registerUrl), // REGISTER_URL
+        Uri.parse(AppConfig.api("/clients/add.json")), // registerUrl
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           for (var entry in fields.entries) entry.key: entry.value.text.trim(),

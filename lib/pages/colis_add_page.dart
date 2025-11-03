@@ -65,7 +65,9 @@ class _AddColisPageState extends State<AddColisPage> {
       final prefs = await SharedPreferences.getInstance();
       _token = prefs.getString("jwt_token");
 
-      final url = Uri.parse(bon2commandesIndexUrl);
+      final url = Uri.parse(
+        AppConfig.api("/bon2commandes/index.json"),
+      ); //bon2commandesIndexUrl
       final response = await http.post(
         url,
         headers: {"Authorization": "Bearer $_token"},
@@ -132,7 +134,9 @@ class _AddColisPageState extends State<AddColisPage> {
     /*final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');*/
 
-    final url = Uri.parse(encodagesAddUrl);
+    final url = Uri.parse(
+      AppConfig.api('/encodages/add.json'),
+    ); //encodagesAddUrl
     final request = http.MultipartRequest("POST", url);
     request.headers["Authorization"] = "Bearer $_token";
 

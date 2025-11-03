@@ -54,7 +54,9 @@ class _AddDestinatairePageState extends State<AddDestinatairePage> {
         return;
       }
       final resp = await http.post(
-        Uri.parse(destinataireAddUrl),
+        Uri.parse(
+          AppConfig.api("/clients/destinataire.json"),
+        ), //destinataireAddUrl
         headers: {
           'Authorization': 'Bearer $_token',
           'Content-Type': 'application/json',

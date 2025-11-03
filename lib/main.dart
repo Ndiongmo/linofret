@@ -7,8 +7,10 @@ import 'pages/register_page.dart';
 import 'pages/destinataire_list_page.dart';
 import 'pages/home_page.dart';
 import 'pages/logout_page.dart';
+import 'config/app_config.dart';
 
 void main() {
+  AppConfig.init(); // Auto ou via .env.dart
   runApp(const MyApp());
 }
 
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Linofret App',
       theme: _buildTheme(),
       // 🌍 Déclaration de toutes les routes ici

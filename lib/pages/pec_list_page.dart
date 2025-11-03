@@ -56,7 +56,9 @@ class _PriseEnChargeListPageState extends State<PriseEnChargeListPage> {
       }
 
       final response = await http.post(
-        Uri.parse(bon2commandesIndexUrl),
+        Uri.parse(
+          AppConfig.api("/bon2commandes/index.json"),
+        ), //bon2commandesIndexUrl
         headers: {'Authorization': 'Bearer $_token'},
       );
 
